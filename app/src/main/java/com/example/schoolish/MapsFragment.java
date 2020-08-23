@@ -40,7 +40,7 @@ import java.util.Objects;
 
 public class MapsFragment extends Fragment {
     boolean doubleBackToExitPressedOnce = false;
-    private List<SchoolModel> schoolList ;
+    private List<SchoolModel> schoolList;
     private Integer preferenceDistance;
     private String preferenceType;
     private AutoCompleteTextView searchView;
@@ -144,7 +144,7 @@ public class MapsFragment extends Fragment {
                                     String selection = parent.getItemAtPosition(position).toString();
                                     for (Marker marker : markerList) {
                                         if (Objects.equals(marker.getTitle(), selection)) {
-                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),17));
+                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 17));
                                             return;
                                         }
                                     }
@@ -191,15 +191,13 @@ public class MapsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Bundle bundle = getArguments();
-            schoolList = new ArrayList<>();
-            if (bundle != null) {
-                schoolList = bundle.getParcelableArrayList("schoolArray");
-            }
-            else
-            {
-                Toast.makeText(context, "Something is wrong ", Toast.LENGTH_SHORT).show();
-            }
-            Log.d("SIZEDEIKH", "onCreateView: " + schoolList.size());
+        schoolList = new ArrayList<>();
+        if (bundle != null) {
+            schoolList = bundle.getParcelableArrayList("schoolArray");
+        } else {
+            Toast.makeText(context, "Something is wrong ", Toast.LENGTH_SHORT).show();
+        }
+        Log.d("SIZEDEIKH", "onCreateView: " + schoolList.size());
 
     }
 
@@ -254,6 +252,7 @@ public class MapsFragment extends Fragment {
         preferenceType = prefs.getString("schoolType", "Co Education");
         preferenceDistance = prefs.getInt("distance", 0);
     }
+
     @Override
     public void onResume() {
         super.onResume();
