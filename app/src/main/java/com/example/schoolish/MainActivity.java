@@ -407,13 +407,13 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-//        if (user == null) {
-//            startActivity(new Intent(this, SignInActivity.class));
-//            finish();
-//        } else {
-//            userName.setText(user.getDisplayName());
-//            Picasso.get().load(user.getPhotoUrl()).into(userImage);
-//        }
+        if (user == null) {
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+        } else {
+            userName.setText(user.getDisplayName());
+            Picasso.get().load(user.getPhotoUrl()).into(userImage);
+        }
     }
 
 

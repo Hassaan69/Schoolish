@@ -23,15 +23,27 @@
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toBottomOf="@+id/textView2" />-->
 
-    <ImageView
-        android:id="@+id/ivSignup"
-        android:layout_width="129dp"
-        android:layout_height="107dp"
-        android:layout_marginTop="8dp"
+    <com.google.android.material.circularreveal.cardview.CircularRevealCardView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/card"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:shapeAppearance="@style/LogoAppearance"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3"
-        app:srcCompat="@drawable/ic_shcool_find" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivSignup"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/schoolish" />
+
+    </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
 
     <TextView
         android:id="@+id/textView"
@@ -43,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivSignup" />
+        app:layout_constraintTop_toBottomOf="@id/card" />
 
     <!--    <EditText-->
 <!--        android:id="@+id/editTextEmailSignUp"-->
