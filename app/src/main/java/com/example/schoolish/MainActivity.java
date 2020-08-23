@@ -72,7 +72,9 @@ import static com.example.schoolish.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LO
 import static com.example.schoolish.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 import static com.example.schoolish.Constants.selectedButton;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
     private SchoolSharedViewModel schoolSharedViewModel;
     private FirebaseAuth auth;
     private DrawerLayout drawerLayout;
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseUser user;
     private ToggleButton mainMapButton;
     private ToggleButton mainFilterButton;
-    private ImageView userImage ;
+    private ImageView userImage;
     private TextView userName;
     private View headerView;
 
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mainMapButton = findViewById(R.id.mainMapButton);
         mainFilterButton = findViewById(R.id.mainFilterButton);
         content = findViewById(R.id.content);
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 float slideX = (drawerView.getWidth() - 200) * slideOffset;
                 content.setTranslationX(slideX);
                 float scaleFactoryX = 999f;
-                float scaleFactoryY = 50f;
+                float scaleFactoryY = 10f;
                 content.setScaleX(1 - (slideOffset / scaleFactoryX));
                 content.setScaleY(1 - (slideOffset / scaleFactoryY));
             }
@@ -123,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerView = navigationView.getHeaderView(0);
         userImage = headerView.findViewById(R.id.ivDrawerProfile);
         userName = headerView.findViewById(R.id.tvDrawerName);
-
 
         uploadToFiresStore();
     }
@@ -404,14 +406,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStart() {
         super.onStart();
         auth = FirebaseAuth.getInstance();
-         user = auth.getCurrentUser();
-        if (user == null) {
-            startActivity(new Intent(this, SignInActivity.class));
-        }
-        else {
-            userName.setText(user.getDisplayName());
-            Picasso.get().load(user.getPhotoUrl()).into(userImage);
-        }
+        user = auth.getCurrentUser();
+//        if (user == null) {
+//            startActivity(new Intent(this, SignInActivity.class));
+//            finish();
+//        } else {
+//            userName.setText(user.getDisplayName());
+//            Picasso.get().load(user.getPhotoUrl()).into(userImage);
+//        }
     }
 
 

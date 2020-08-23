@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MapsFragment extends Fragment {
+
     boolean doubleBackToExitPressedOnce = false;
     private List<SchoolModel> schoolList;
     private Integer preferenceDistance;
@@ -47,141 +48,137 @@ public class MapsFragment extends Fragment {
     private List<SearchItem> searchItems;
     private List<Marker> markerList = new ArrayList<>();
     private SchoolSharedViewModel schoolSharedViewModel;
+
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
+
         @Override
         public void onMapReady(final GoogleMap googleMap) {
+
             schoolSharedViewModel.initLocation(getContext());
-            schoolSharedViewModel.getSearchPreferencesItemMutableLiveData().observe(getViewLifecycleOwner(), new Observer<SearchPreferencesItem>() {
-                @Override
-                public void onChanged(SearchPreferencesItem searchPreferencesItem) {
-                    preferenceType = searchPreferencesItem.getTypePreference();
-                    preferenceDistance = searchPreferencesItem.getDistancePreference();
-                    Log.d("CheckPreference", "onChanged: " + preferenceType + preferenceDistance);
-                    schoolSharedViewModel.getGeoPointMutableLiveData().observe(getViewLifecycleOwner(), new Observer<GeoPoint>() {
-                        @Override
-                        public void onChanged(final GeoPoint geoPoint) {
-                            Log.d("GG", "onChanged:  on geo point");
-                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                                    ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            schoolSharedViewModel.getSearchPreferencesItemMutableLiveData()
+                    .observe(getViewLifecycleOwner(), searchPreferencesItem -> {
+
+                preferenceType = searchPreferencesItem.getTypePreference();
+                preferenceDistance = searchPreferencesItem.getDistancePreference();
+                Log.d("CheckPreference", "onChanged: " + preferenceType + preferenceDistance);
+
+                schoolSharedViewModel.getGeoPointMutableLiveData().observe(getViewLifecycleOwner(), geoPoint -> {
+                    Log.d("GG", "onChanged:  on geo point");
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    if (preferenceType.equals("Show All") && preferenceDistance == 0) {
+                        Log.d("Check", "onChanged: HERE ");
+                        googleMap.clear();
+                        searchItems = new ArrayList<>();
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            String title = schoolList.get(i).getSchoolName();
+                            searchItems.add(new SearchItem(title));
+                            SchoolModel markerData = schoolList.get(i);
+                            setMarkersWithoutDistance(markerData, googleMap);
+                        }
+                    } else if (preferenceType.equals("Show All") && preferenceDistance > 0) {
+                        Log.d("Check", "onChanged: HERE ");
+                        googleMap.clear();
+                        searchItems = new ArrayList<>();
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            SchoolModel markerData = schoolList.get(i);
+                            setMarkersWithDistance(markerData, googleMap, geoPoint);
+                        }
+                    } else if (preferenceType.equals("Co Education") && preferenceDistance == 0) {
+                        Log.d("Check", "onChanged: HERE ");
+                        googleMap.clear();
+                        searchItems = new ArrayList<>();
+
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            SchoolModel markerData = schoolList.get(i);
+                            setMarkersWithTypeandWithoutDistance(markerData, googleMap);
+                        }
+                    } else if (preferenceType.equals("Co Education") && preferenceDistance > 0) {
+                        Log.d("Check", "onChanged: HERE ");
+                        googleMap.clear();
+                        searchItems = new ArrayList<>();
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            SchoolModel markerData = schoolList.get(i);
+                            setMarkersWithTypAndDistance(markerData, googleMap, geoPoint);
+                        }
+                    } else if (preferenceType.equals("For Boys") && preferenceDistance == 0) {
+                        Log.d("Check", "onChanged: HERE ");
+                        googleMap.clear();
+                        searchItems = new ArrayList<>();
+
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            SchoolModel markerData = schoolList.get(i);
+                            setMarkersWithTypeandWithoutDistance(markerData, googleMap);
+                        }
+                    } else if (preferenceType.equals("For Boys") && preferenceDistance > 0) {
+                        Log.d("Check", "onChanged: HERE ");
+                        googleMap.clear();
+                        searchItems = new ArrayList<>();
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            SchoolModel markerData = schoolList.get(i);
+                            setMarkersWithTypAndDistance(markerData, googleMap, geoPoint);
+                        }
+                    } else if (preferenceType.equals("For Girls") && preferenceDistance == 0) {
+                        Log.d("Check", "onChanged: HERE ");
+                        googleMap.clear();
+                        searchItems = new ArrayList<>();
+
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            SchoolModel markerData = schoolList.get(i);
+                            setMarkersWithTypeandWithoutDistance(markerData, googleMap);
+                        }
+                    } else if (preferenceType.equals("For Girls") && preferenceDistance > 0) {
+                        Log.d("Check", "onChanged: HERE ");
+                        googleMap.clear();
+                        searchItems = new ArrayList<>();
+                        for (int i = 0; i < schoolList.size(); i++) {
+                            SchoolModel markerData = schoolList.get(i);
+                            setMarkersWithTypAndDistance(markerData, googleMap, geoPoint);
+                        }
+                    }
+                    LatLng latLng = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
+                    googleMap.setMyLocationEnabled(true);
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+                    searchView.setOnItemClickListener((parent, view, position, id) -> {
+                        String selection = parent.getItemAtPosition(position).toString();
+                        for (Marker marker : markerList) {
+                            if (Objects.equals(marker.getTitle(), selection)) {
+                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 17));
                                 return;
                             }
-                            if (preferenceType.equals("Show All") && preferenceDistance == 0) {
-                                Log.d("Check", "onChanged: HERE ");
-                                googleMap.clear();
-                                searchItems = new ArrayList<>();
-                                for (int i = 0; i < schoolList.size(); i++) {
-                                    String title = schoolList.get(i).getSchoolName();
-                                    searchItems.add(new SearchItem(title));
-                                    SchoolModel markerData = schoolList.get(i);
-                                    setMarkersWithoutDistance(markerData, googleMap);
-                                }
-                            } else if (preferenceType.equals("Show All") && preferenceDistance > 0) {
-                                Log.d("Check", "onChanged: HERE ");
-                                googleMap.clear();
-                                searchItems = new ArrayList<>();
-                                for (int i = 0; i < schoolList.size(); i++) {
-                                    SchoolModel markerData = schoolList.get(i);
-                                    setMarkersWithDistance(markerData, googleMap, geoPoint);
-                                }
-                            } else if (preferenceType.equals("Co Education") && preferenceDistance == 0) {
-                                Log.d("Check", "onChanged: HERE ");
-                                googleMap.clear();
-                                searchItems = new ArrayList<>();
-
-                                for (int i = 0; i < schoolList.size(); i++) {
-                                    SchoolModel markerData = schoolList.get(i);
-                                    setMarkersWithTypeandWithoutDistance(markerData, googleMap);
-                                }
-                            } else if (preferenceType.equals("Co Education") && preferenceDistance > 0) {
-                                Log.d("Check", "onChanged: HERE ");
-                                googleMap.clear();
-                                searchItems = new ArrayList<>();
-                                for (int i = 0; i < schoolList.size(); i++) {
-                                    SchoolModel markerData = schoolList.get(i);
-                                    setMarkersWithTypAndDistance(markerData, googleMap, geoPoint);
-                                }
-                            } else if (preferenceType.equals("For Boys") && preferenceDistance == 0) {
-                                Log.d("Check", "onChanged: HERE ");
-                                googleMap.clear();
-                                searchItems = new ArrayList<>();
-
-                                for (int i = 0; i < schoolList.size(); i++) {
-                                    SchoolModel markerData = schoolList.get(i);
-                                    setMarkersWithTypeandWithoutDistance(markerData, googleMap);
-                                }
-                            } else if (preferenceType.equals("For Boys") && preferenceDistance > 0) {
-                                Log.d("Check", "onChanged: HERE ");
-                                googleMap.clear();
-                                searchItems = new ArrayList<>();
-                                for (int i = 0; i < schoolList.size(); i++) {
-                                    SchoolModel markerData = schoolList.get(i);
-                                    setMarkersWithTypAndDistance(markerData, googleMap, geoPoint);
-                                }
-                            } else if (preferenceType.equals("For Girls") && preferenceDistance == 0) {
-                                Log.d("Check", "onChanged: HERE ");
-                                googleMap.clear();
-                                searchItems = new ArrayList<>();
-
-                                for (int i = 0; i < schoolList.size(); i++) {
-                                    SchoolModel markerData = schoolList.get(i);
-                                    setMarkersWithTypeandWithoutDistance(markerData, googleMap);
-                                }
-                            } else if (preferenceType.equals("For Girls") && preferenceDistance > 0) {
-                                Log.d("Check", "onChanged: HERE ");
-                                googleMap.clear();
-                                searchItems = new ArrayList<>();
-                                for (int i = 0; i < schoolList.size(); i++) {
-                                    SchoolModel markerData = schoolList.get(i);
-                                    setMarkersWithTypAndDistance(markerData, googleMap, geoPoint);
-                                }
-                            }
-                            LatLng latLng = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
-                            googleMap.setMyLocationEnabled(true);
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-                            searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    String selection = parent.getItemAtPosition(position).toString();
-                                    for (Marker marker : markerList) {
-                                        if (Objects.equals(marker.getTitle(), selection)) {
-                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 17));
-                                            return;
-                                        }
-                                    }
-                                }
-                            });
-                            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                                @Override
-                                public boolean onMarkerClick(Marker marker) {
-                                    if (doubleBackToExitPressedOnce) {
-                                        Intent intent = new Intent(getContext(), DetailsActivity.class);
-                                        LatLng latLngfrom = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
-                                        LatLng latLngto = marker.getPosition();
-                                        double distance = CalculationByDistance(latLngfrom, latLngto);
-                                        SchoolModel schoolModel = (SchoolModel) marker.getTag();
-                                        Bundle bundle = new Bundle();
-                                        bundle.putParcelable("schoolDetails", schoolModel);
-                                        bundle.putDouble("distance", distance);
-                                        bundle.putDouble("latitude", latLngto.latitude);
-                                        bundle.putDouble("longitude", latLngto.longitude);
-                                        intent.putExtra("schoolData", bundle);
-                                        startActivity(intent);
-                                    } else {
-                                        doubleBackToExitPressedOnce = true;
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                doubleBackToExitPressedOnce = false;
-                                            }
-                                        }, 2000);
-                                    }
-                                    return false;
-                                }
-                            });
                         }
                     });
 
-                }
+                    googleMap.setOnMarkerClickListener(marker -> {
+                        if (doubleBackToExitPressedOnce) {
+                            Intent intent = new Intent(getContext(), DetailsActivity.class);
+                            LatLng latLngfrom = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
+                            LatLng latLngto = marker.getPosition();
+                            double distance = CalculationByDistance(latLngfrom, latLngto);
+                            SchoolModel schoolModel = (SchoolModel) marker.getTag();
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("schoolDetails", schoolModel);
+                            bundle.putDouble("distance", distance);
+                            bundle.putDouble("latitude", latLngto.latitude);
+                            bundle.putDouble("longitude", latLngto.longitude);
+                            intent.putExtra("schoolData", bundle);
+                            startActivity(intent);
+                        } else {
+                            doubleBackToExitPressedOnce = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    doubleBackToExitPressedOnce = false;
+                                }
+                            }, 2000);
+                        }
+                        return false;
+                    });
+                });
+
             });
 
         }

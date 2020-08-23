@@ -5,8 +5,7 @@
     android:layout_height="250dp"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:elevation="5dp"
-    android:background="@color/colorPrimaryDark"
+    android:elevation="0dp"
     android:padding="20dp">
 
     <de.hdodenhof.circleimageview.CircleImageView

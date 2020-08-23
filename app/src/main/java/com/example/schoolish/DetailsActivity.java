@@ -8,23 +8,28 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 public class DetailsActivity extends AppCompatActivity {
     private SchoolModel schoolDetails;
-    private TextView schoolName , schoolAddress , schoolType , schoolOrganization ,distance;
+    private TextView schoolName , schoolAddress;
+    private Chip chipOrganization, chipSchoolType, chipDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
         schoolName = findViewById(R.id.schoolName);
         schoolAddress = findViewById(R.id.schoolAddress);
-        schoolOrganization = findViewById(R.id.schoolOrganization);
-        schoolType = findViewById(R.id.schoolType);
-        distance = findViewById(R.id.distance);
+        chipOrganization = findViewById(R.id.chipOrganization);
+        chipSchoolType = findViewById(R.id.chipSchoolType);
+        chipDistance = findViewById(R.id.chipDistance);
+
         Bundle bundle = getIntent().getBundleExtra("schoolData");
         assert bundle != null;
         double latitude = bundle.getDouble("latitude");
@@ -36,12 +41,14 @@ public class DetailsActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         schoolDetails = (SchoolModel) bundle.get("schoolDetails");
         assert schoolDetails != null;
+
         schoolName.setText(schoolDetails.getSchoolName());
-        schoolOrganization.setText(schoolDetails.getOrganization());
-        schoolType.setText(schoolDetails.getType());
-        distance.setText(String.valueOf(distanceinkms)+" KM");
+        chipOrganization.setText(schoolDetails.getOrganization());
+        chipSchoolType.setText(schoolDetails.getType());
+        chipDistance.setText("Distance - " + distanceinkms +" KM");
 
 
     }
