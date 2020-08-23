@@ -3,6 +3,7 @@ package com.example.schoolish;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,6 +30,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,6 +43,8 @@ import java.util.Objects;
 
 public class MapsFragment extends Fragment {
 
+    private int strokeColor = 0xff167AD3; //blue outline
+    private int shadeColor = 0x20167AD3; //opaque blue fill
     boolean doubleBackToExitPressedOnce = false;
     private List<SchoolModel> schoolList;
     private Integer preferenceDistance;
@@ -79,13 +84,13 @@ public class MapsFragment extends Fragment {
                             setMarkersWithoutDistance(markerData, googleMap);
                         }
                     } else if (preferenceType.equals("Show All") && preferenceDistance > 0) {
-                        Log.d("Check", "onChanged: HERE ");
                         googleMap.clear();
                         searchItems = new ArrayList<>();
                         for (int i = 0; i < schoolList.size(); i++) {
                             SchoolModel markerData = schoolList.get(i);
                             setMarkersWithDistance(markerData, googleMap, geoPoint);
                         }
+
                     } else if (preferenceType.equals("Co Education") && preferenceDistance == 0) {
                         Log.d("Check", "onChanged: HERE ");
                         googleMap.clear();
@@ -140,7 +145,13 @@ public class MapsFragment extends Fragment {
                     }
                     LatLng latLng = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
                     googleMap.setMyLocationEnabled(true);
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+                    googleMap.addCircle(new CircleOptions()
+                            .center(latLng)
+                            .radius(preferenceDistance*1000)
+                            .fillColor(shadeColor)
+                            .strokeColor(strokeColor)
+                            .strokeWidth(8f));
 
                     searchView.setOnItemClickListener((parent, view, position, id) -> {
                         String selection = parent.getItemAtPosition(position).toString();
