@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "463618370650",
+    "firebase_url": "https://schoolish-5aebb.firebaseio.com",
+    "project_id": "schoolish-5aebb",
+    "storage_bucket": "schoolish-5aebb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463618370650:android:002d55fab976ae577cfc63",
+        "android_client_info": {
+          "package_name": "com.example.schoolish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463618370650-qrooofsoe6e4l10rm6qup8mtcaoec7jk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.schoolish",
+            "certificate_hash": "ff58ddd423847e7385c40acdd72c518aff9d9d57"
+          }
+        },
+        {
+          "client_id": "463618370650-ot7pgc9gbqtltun6cis67i5tlipelbct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjbOXljbY40n_fgxkl7Cr_7-ZG0gipFok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "463618370650-m94fno2l03s65asi3os5mqsl1jsrn36n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

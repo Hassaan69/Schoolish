@@ -1,0 +1,19 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="schoolType_entries">
+        <item>Co-education</item>
+        <item>For Boys</item>
+        <item>For Girls</item>
+        <item>Show All</item>
+
+
+    </string-array>
+
+    <string-array name="schoolType_values">
+        <item>Co Education</item>
+        <item>For Boys</item>
+        <item>For Girls</item>
+        <item>Show All</item>
+
+    </string-array>
+</resources>

@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="Quick Filter">
+        <ListPreference
+            app:defaultValue="Show All"
+            app:entries="@array/schoolType_entries"
+            app:entryValues="@array/schoolType_values"
+            app:key="schoolType"
+            app:title="Select School Type"
+            app:useSimpleSummaryProvider="true" />
+
+        <SeekBarPreference
+            app:key="distance"
+            app:title="Distance in KMs"
+            app:defaultValue="0"
+            android:max="11"
+            app:showSeekBarValue="true" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
