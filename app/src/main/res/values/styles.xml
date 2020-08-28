@@ -15,11 +15,11 @@
     
     <style name="LogoAppearance" parent="ShapeAppearance.MaterialComponents.LargeComponent" >
         <item name="cardCornerRadius">40dp</item>
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSizeBottomLeft">60dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeTopLeft">0dp</item>
-        <item name="cornerSizeTopRight">60dp</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeBottomLeft">200dp</item>
+        <item name="cornerSizeBottomRight">200dp</item>
+        <item name="cornerSizeTopLeft">200dp</item>
+        <item name="cornerSizeTopRight">200dp</item>
     </style>
 
 </resources>

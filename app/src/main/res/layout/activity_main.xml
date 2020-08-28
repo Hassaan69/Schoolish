@@ -8,23 +8,12 @@
     android:background="@drawable/app_background"
     tools:context=".MainActivity"
     tools:openDrawer="start">
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="250dp"
-        android:elevation="0dp"
-        android:background="@android:color/transparent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_menu" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="24dp">
-
+        android:background="@android:color/transparent"
+        android:elevation="12dp">
         <include
             android:id="@+id/toolbar_main"
             layout="@layout/mainactivity_toolbar"
@@ -43,7 +32,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="33dp"
             android:layout_marginBottom="55dp"
             android:background="@android:color/transparent"
             android:elevation="0dp"
@@ -86,6 +75,17 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:elevation="0dp"
+        android:background="@android:color/transparent"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_menu"
+        android:fitsSystemWindows="true"/>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

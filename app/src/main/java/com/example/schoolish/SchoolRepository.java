@@ -39,7 +39,7 @@ public class SchoolRepository {
     public MutableLiveData<List<SchoolModel>> schoolList = new MutableLiveData<>();
     private List<SchoolModel> dummyList = new ArrayList<>();
     public MutableLiveData<GeoPoint> geoPointMutableLiveData = new MutableLiveData<>();
-    public MutableLiveData<String> searchPreference = new MutableLiveData<>();
+//    public MutableLiveData<String> searchPreference = new MutableLiveData<>();
     public MutableLiveData<SearchPreferencesItem> preferencesItemMutableLiveData = new MutableLiveData<>();
 
 //  public ListenerRegistration listenerRegistration;
@@ -120,10 +120,12 @@ public class SchoolRepository {
     public void getSearchPreferences(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String preferenceType = prefs.getString("schoolType", "Co Education");
+        String preferenceType = prefs.getString("schoolType", "Show All");
         int preferenceDistance = prefs.getInt("distance", 0);
-        preferencesItemMutableLiveData.postValue(new SearchPreferencesItem(preferenceType,preferenceDistance));
-        searchPreference.postValue(preferenceType);
-        Log.d("CheckPref", "getPreferencesValue: " + preferenceType + preferenceDistance ) ;
+        SharedPreferences freeprefs = context.getSharedPreferences("searchItems", context.MODE_PRIVATE );;
+        int preferenceFee = freeprefs.getInt("fees",0);
+        preferencesItemMutableLiveData.postValue(new SearchPreferencesItem(preferenceType,preferenceDistance,preferenceFee));
+//        searchPreference.postValue(preferenceType);
+        Log.d("CheckPref", "getPreferencesValue: " + preferenceType + preferenceDistance + preferenceFee ) ;
     }
 }

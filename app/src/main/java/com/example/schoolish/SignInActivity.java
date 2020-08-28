@@ -89,6 +89,7 @@ public class SignInActivity extends AppCompatActivity {
                             intent.putExtra("userName",user.getDisplayName());
                             intent.putExtra("photoUrl",user.getPhotoUrl());
                             startActivity(intent);
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(SignInActivity.this, " " + task.getException(), Toast.LENGTH_SHORT).show();

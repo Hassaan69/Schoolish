@@ -16,4 +16,26 @@
         <item>Show All</item>
 
     </string-array>
+    
+    <string-array name="schoolFeeArray">
+        <item>500 RS</item>
+        <item>1000 RS</item>
+        <item>2000 RS</item>
+        <item>3000 RS</item>
+        <item>4000 RS</item>
+        <item>5000 RS</item>
+        <item>6000 RS</item>
+
+    </string-array>
+    <string-array name="schoolFeeValues">
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+        <item>4000</item>
+        <item>5000</item>
+        <item>6000</item>
+
+    </string-array>
+
 </resources>

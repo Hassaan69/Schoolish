@@ -7,41 +7,28 @@
     android:background="@drawable/app_background"
     tools:context=".SignInActivity">
 
-
-<!--    <Button-->
-<!--        android:id="@+id/buttonSingUpSignIn"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="35dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginEnd="35dp"-->
-<!--        android:background="#FDBF5E"-->
-<!--        android:text="SING Up"-->
-<!--        android:onClick="SingInSingUpClicked"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/textView2" />-->
-
     <com.google.android.material.circularreveal.cardview.CircularRevealCardView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
         android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="423dp"
+        android:layout_marginTop="24dp"
+        android:elevation="4dp"
         app:cardBackgroundColor="@color/colorWhite"
-        app:shapeAppearance="@style/LogoAppearance"
+        app:cardCornerRadius="150dp"
+        app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivSignup"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/schoolish"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/schoolish" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
 
@@ -51,79 +38,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Welcome!"
+        android:textColor="@color/colorWhite"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card" />
 
-    <!--    <EditText-->
-<!--        android:id="@+id/editTextEmailSignUp"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="35dp"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:layout_marginEnd="35dp"-->
-<!--        android:drawableLeft="@drawable/ic_email"-->
-<!--        android:drawablePadding="15dp"-->
-<!--        android:ems="10"-->
-<!--        android:hint="Email Address"-->
-<!--        android:inputType="textEmailAddress"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/textView" />-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/editTextPasswordSingUp"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="35dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="35dp"-->
-<!--        android:drawableLeft="@drawable/ic_password"-->
-<!--        android:drawablePadding="15dp"-->
-<!--        android:ems="10"-->
-<!--        android:hint="Password"-->
-<!--        android:inputType="textPassword"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/editTextEmailSignUp" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/buttonSignInSignIn"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="35dp"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:layout_marginEnd="35dp"-->
-<!--        android:background="#FDBF5E"-->
-<!--        android:text="SING IN"-->
-<!--        android:onClick="SingInSingInCliked"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordSingUp" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/textView2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="Don't have an account ?"-->
-<!--        android:textSize="18sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/buttonSignInSignIn" />-->
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="80dp"
         android:onClick="SingInClicked"
         app:buttonSize="wide"

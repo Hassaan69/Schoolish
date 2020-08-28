@@ -1,23 +1,33 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="vertical">
 
     <PreferenceCategory app:title="Quick Filter">
         <ListPreference
+            android:icon="@drawable/ic_school_type"
             app:defaultValue="Show All"
             app:entries="@array/schoolType_entries"
             app:entryValues="@array/schoolType_values"
             app:key="schoolType"
+            android:defaultValue="Show All"
             app:title="Select School Type"
             app:useSimpleSummaryProvider="true" />
 
         <SeekBarPreference
-            app:key="distance"
-            app:title="Distance in KMs"
-            app:defaultValue="0"
+            android:icon="@drawable/ic_distance"
             android:max="11"
-            app:showSeekBarValue="true" />
+            app:defaultValue="0"
+            app:key="distance"
+            app:showSeekBarValue="true"
+            app:title="Distance in KMs" />
+
+        <SeekBarPreference
+            android:max="50"
+            app:defaultValue="0"
+            app:key="fee"
+            app:min="0"
+            app:title="Fee Range Under" />
+
 
     </PreferenceCategory>
-
-
 </PreferenceScreen>

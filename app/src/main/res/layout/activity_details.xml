@@ -118,6 +118,14 @@
                     app:chipBackgroundColor="#26A69A"
                     app:chipIcon="@drawable/ic_distance"
                     android:text="Distance - 2.6 KM"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Chip"
+                    app:chipBackgroundColor="#26A69A"
+                    app:chipIcon="@drawable/ic_money"
+                    android:text="Monthly Fees - 2000 RS"/>
 
             </com.google.android.material.chip.ChipGroup>
 

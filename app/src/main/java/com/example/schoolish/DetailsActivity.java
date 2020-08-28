@@ -17,7 +17,7 @@ import java.util.Locale;
 public class DetailsActivity extends AppCompatActivity {
     private SchoolModel schoolDetails;
     private TextView schoolName , schoolAddress;
-    private Chip chipOrganization, chipSchoolType, chipDistance;
+    private Chip chipOrganization, chipSchoolType, chipDistance , chipFee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +29,15 @@ public class DetailsActivity extends AppCompatActivity {
         chipOrganization = findViewById(R.id.chipOrganization);
         chipSchoolType = findViewById(R.id.chipSchoolType);
         chipDistance = findViewById(R.id.chipDistance);
+        chipFee = findViewById(R.id.chipFee) ;
 
         Bundle bundle = getIntent().getBundleExtra("schoolData");
         assert bundle != null;
         double latitude = bundle.getDouble("latitude");
         double longitude = bundle.getDouble("longitude");
         double distanceinkms = bundle.getDouble("distance");
+        SchoolModel schoolModel = (SchoolModel) bundle.get("schoolDetails");
+
         distanceinkms = Math.round(distanceinkms * 100.0) / 100.0;
         try {
             schoolAddress.setText(getLocationFromLatLong(latitude,longitude));
@@ -49,6 +52,8 @@ public class DetailsActivity extends AppCompatActivity {
         chipOrganization.setText(schoolDetails.getOrganization());
         chipSchoolType.setText(schoolDetails.getType());
         chipDistance.setText("Distance - " + distanceinkms +" KM");
+        assert schoolModel != null;
+        chipFee.setText("Monthly Fees - " + schoolModel.getFees() + " RS");
 
 
     }

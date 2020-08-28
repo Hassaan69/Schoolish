@@ -1,27 +1,24 @@
 package com.example.schoolish;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,15 +28,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,21 +38,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,25 +67,27 @@ public class MainActivity extends AppCompatActivity
     private SchoolSharedViewModel schoolSharedViewModel;
     private FirebaseAuth auth;
     private DrawerLayout drawerLayout;
+    private Bundle bundle = new Bundle();
     private ConstraintLayout content;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private List<SchoolModel> listOfSchools;
     private Toolbar toolbar;
     private HashMap<String, HashMap<String, String>> uploadData = new HashMap<>();
     private boolean mLocationPermissionGranted = false;
-    MapsFragment mapsFragment = new MapsFragment();
-    FirebaseUser user;
+    private MapsFragment mapsFragment = new MapsFragment();
+    private FirebaseUser user;
     private ToggleButton mainMapButton;
     private ToggleButton mainFilterButton;
     private ImageView userImage;
     private TextView userName;
     private View headerView;
+    private ArrayList<SchoolModel> list = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mainMapButton = findViewById(R.id.mainMapButton);
         mainFilterButton = findViewById(R.id.mainFilterButton);
         content = findViewById(R.id.content);
@@ -118,7 +109,8 @@ public class MainActivity extends AppCompatActivity
             }
         };
         drawerLayout.setScrimColor(Color.TRANSPARENT);
-        drawerLayout.setDrawerElevation(0);
+        drawerLayout.setDrawerElevation(0f);
+        drawerLayout.setDrawerShadow(android.R.color.transparent, GravityCompat.START);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -138,7 +130,7 @@ public class MainActivity extends AppCompatActivity
 
         mainFilterButton.setChecked(false);
         selectedButton = Constants.Map;
-        initializeViewMoel();
+        setMapsFragment();
     }
 
     public void setMainFilterButton(View view) {
@@ -197,7 +189,7 @@ public class MainActivity extends AppCompatActivity
             // DO SOMETHING
 //            getLocation();
             uploadToFiresStore();
-            initializeViewMoel();
+            setMapsFragment();
 //            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, mapsFragment).commit();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
@@ -250,7 +242,7 @@ public class MainActivity extends AppCompatActivity
                     //DO SOMETHING
 //                    getLocation();
                     uploadToFiresStore();
-                    initializeViewMoel();
+                    setMapsFragment();
 //                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, mapsFragment).commit();
 
 
@@ -281,10 +273,10 @@ public class MainActivity extends AppCompatActivity
                     if (!map.isEmpty()) {
                         Log.d("UploadData", " Data already present ");
                     } else {
-                        firestoreData();
+                        uploadFirestoreData();
                     }
                 } else {
-                    firestoreData();
+                    uploadFirestoreData();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -297,7 +289,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void firestoreData() {
+    private void uploadFirestoreData() {
         Toast.makeText(MainActivity.this, "Inserting Data to FireStore", Toast.LENGTH_SHORT).show();
         try {
             listOfSchools = readCSV();
@@ -364,21 +356,52 @@ public class MainActivity extends AppCompatActivity
         return schoolModel;
     }
 
-    private void initializeViewMoel() {
-        schoolSharedViewModel = new ViewModelProvider(this).get(SchoolSharedViewModel.class);
-        schoolSharedViewModel.init();
-        schoolSharedViewModel.getSchoolList().observe(this, new Observer<List<SchoolModel>>() {
-            @Override
-            public void onChanged(List<SchoolModel> schoolModels) {
-                ArrayList<SchoolModel> list = new ArrayList<>(schoolModels.size());
-                list.addAll(schoolModels);
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("schoolArray", list);
-                mapsFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, mapsFragment).commit();
-            }
-        });
+    private void fetchSchoolData() {
+        FirebaseFirestore.getInstance().collection("SchoolsData")
+                .document("xhHBIaM7VUaJF39b2Pb2")
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("ListenerFirestore", "Failed", error);
+                            return;
+                        }
+                        //if we are here we have data
+                        if (value != null) {
+                            parseData(value);
 
+                        }
+                    }
+                });
+    }
+
+    private void parseData(DocumentSnapshot value) {
+        HashMap<String, HashMap<String, String>> firestoreData = (HashMap<String, HashMap<String, String>>) value.get("Schools");
+        assert firestoreData != null;
+        List<HashMap<String, String>> hashMapArrayList = new ArrayList<>();
+        for (int i = 0; i < firestoreData.size(); i++) {
+            String formated = String.format("%02d", i);
+            String mapCounter = "SO" + formated;
+            hashMapArrayList.add(firestoreData.get(mapCounter));
+        }
+        for (int i = 0; i < hashMapArrayList.size(); i++) {
+            SchoolModel schoolModel = new SchoolModel();
+            schoolModel.setSchoolName(hashMapArrayList.get(i).get("schoolName"));
+            schoolModel.setFees(hashMapArrayList.get(i).get("fees"));
+            schoolModel.setOrganization(hashMapArrayList.get(i).get("organization"));
+            schoolModel.setPrincipalName(hashMapArrayList.get(i).get("principalName"));
+            schoolModel.setType(hashMapArrayList.get(i).get("type"));
+            schoolModel.setLocation(hashMapArrayList.get(i).get("location"));
+            list.add(schoolModel);
+        }
+
+        bundle.putParcelableArrayList("schoolArray", list);
+        mapsFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, mapsFragment).commitAllowingStateLoss();
+    }
+
+    private void setMapsFragment() {
+        fetchSchoolData();
     }
 
 
@@ -389,8 +412,7 @@ public class MainActivity extends AppCompatActivity
             if (mLocationPermissionGranted) {
                 // DO SOMETHING
 //                getLocation();
-                uploadToFiresStore();
-                initializeViewMoel();
+                setMapsFragment();
 //                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, mapsFragment).commit();
 
             } else {
@@ -424,7 +446,6 @@ public class MainActivity extends AppCompatActivity
 
         } else {
             super.onBackPressed();
-            System.exit(0);
         }
     }
 
